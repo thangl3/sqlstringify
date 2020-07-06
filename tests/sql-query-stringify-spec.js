@@ -521,7 +521,7 @@ describe('Query stringify', function () {
   describe('insert many builder', function () {
     it('should be an insert sql with many values', function () {
       const result = queryString.insertMany('abc', [{ id: 555, name: 'abc', at: 'NOW()' }]);
-      expect(result).toEqual("INSERT INTO `abc` (`id`, `name`, `at`) VALUES (`id` = 555, `name` = 'abc', `at` = NOW())");
+      expect(result).toEqual("INSERT INTO `abc` (`id`, `name`, `at`) VALUES (555, 'abc', NOW())");
     });
 
     it('should be an insert sql with many values', function () {
@@ -534,7 +534,7 @@ describe('Query stringify', function () {
         { name: 12 },
       );
 
-      expect(result).toEqual("INSERT INTO `abc` (`id`, `name`, `at`) VALUES (`id` = 555, `name` = 'abc', `at` = NOW()), (`id` = 666, `name` = 'def', `at` = NOW())");
+      expect(result).toEqual("INSERT INTO `abc` (`id`, `name`, `at`) VALUES (555, 'abc', NOW()), (666, 'def', NOW())");
     });
   });
 });
