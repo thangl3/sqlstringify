@@ -185,9 +185,9 @@ describe('Query stringify', function () {
     });
 
     it('should be stringify object to column string', function () {
-      const result = queryString.columns({ name: 'name1', title: 'title1', all: '*' });
+      const result = queryString.columns({ name: 'name1', title: 'title1', '*': 'asd' });
 
-      expect(result).toEqual('`name1`, `title1`, *');
+      expect(result).toEqual('`name`, `title`, *');
     });
 
     it('should be stringify array object to column string', function () {
@@ -535,6 +535,11 @@ describe('Query stringify', function () {
       );
 
       expect(result).toEqual("INSERT INTO `abc` (`id`, `name`, `at`) VALUES (555, 'abc', NOW()), (666, 'def', NOW())");
+    });
+
+    it('should be stringify object to insert sql with values', function () {
+      const result = queryString.insertMany('abc', { id: 555, name: 'abc', at: 'NOW()' });
+      expect(result).toEqual("INSERT INTO `abc` (`id`, `name`, `at`) VALUES (555, 'abc', NOW())");
     });
   });
 });
