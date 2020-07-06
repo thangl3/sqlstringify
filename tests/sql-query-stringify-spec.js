@@ -1,6 +1,6 @@
 const queryString = require('../lib/sql-query-stringify');
 
-describe('Query helper', function () {
+describe('Query stringify', function () {
   describe('can escape key', function () {
     it('should is quoted', function () {
       expect(queryString.escapeKey('id')).toEqual('`id`');
@@ -182,6 +182,18 @@ describe('Query helper', function () {
       const result = queryString.columns('*');
 
       expect(result).toEqual('*');
+    });
+
+    it('should be stringify object to column string', function () {
+      const result = queryString.columns({ name: 'name1', title: 'title1', all: '*' });
+
+      expect(result).toEqual('`name1`, `title1`, *');
+    });
+
+    it('should be stringify array object to column string', function () {
+      const result = queryString.columns([{ name: 'name1', title: 'title1', all: '*' }]);
+
+      expect(result).toEqual('`name`, `title`, `all`');
     });
   });
 
@@ -509,7 +521,7 @@ describe('Query helper', function () {
   describe('insert many builder', function () {
     it('should be an insert sql with many values', function () {
       const result = queryString.insertMany('abc', [{ id: 555, name: 'abc', at: 'NOW()' }]);
-      expect(result).toEqual("INSERT INTO `abc` VALUES (`id` = 555, `name` = 'abc', `at` = NOW())");
+      expect(result).toEqual("INSERT INTO `abc` (`id`, `name`, `at`) VALUES (`id` = 555, `name` = 'abc', `at` = NOW())");
     });
 
     it('should be an insert sql with many values', function () {
@@ -522,7 +534,7 @@ describe('Query helper', function () {
         { name: 12 },
       );
 
-      expect(result).toEqual("INSERT INTO `abc` VALUES (`id` = 555, `name` = 'abc', `at` = NOW()), (`id` = 666, `name` = 'def', `at` = NOW())");
+      expect(result).toEqual("INSERT INTO `abc` (`id`, `name`, `at`) VALUES (`id` = 555, `name` = 'abc', `at` = NOW()), (`id` = 666, `name` = 'def', `at` = NOW())");
     });
   });
 });
