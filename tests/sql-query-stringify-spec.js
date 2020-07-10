@@ -538,8 +538,13 @@ describe('Query stringify', function () {
     });
 
     it('should be stringify object to insert sql with values', function () {
-      const result = queryString.insertMany('abc', { id: 555, name: 'abc', at: 'NOW()' });
+      const result = queryString.insertMany('abc', { id: 555, name: 'abc', at: 'NOW()', by: undefined });
       expect(result).toEqual("INSERT INTO `abc` (`id`, `name`, `at`) VALUES (555, 'abc', NOW())");
+    });
+
+    it('should be stringify object contain NULL to insert sql with values', function () {
+      const result = queryString.insertMany('abc', { id: 555, name: 'abc', at: 'NOW()', by: null });
+      expect(result).toEqual("INSERT INTO `abc` (`id`, `name`, `at`, `by`) VALUES (555, 'abc', NOW(), NULL)");
     });
   });
 });
