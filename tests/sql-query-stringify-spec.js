@@ -151,6 +151,18 @@ describe('Query stringify', function () {
 
       expect(result).toEqual("`name` = 'name1' AND `title` = 'title1' AND `title` = 'title2' AND `isActive` = true");
     });
+
+    it("should to be empty", function () {
+      const result = queryString.where({});
+
+      expect(result).toEqual("");
+    });
+
+    it("should to be null", function () {
+      const result = queryString.where();
+
+      expect(result).toEqual(null);
+    });
   });
 
   describe('stringify columns', function () {
@@ -444,6 +456,15 @@ describe('Query stringify', function () {
           columns: '1 AS all',
         });
       }).toThrowError('Missing select `from` table.');
+    });
+
+    it('should to be query without where', function () {
+      const sqlString = queryString.select({
+        from: 'test',
+        columns: 'true AS 1',
+      });
+
+      expect(sqlString).toEqual('SELECT true AS `1` FROM `test`');
     });
   });
 
