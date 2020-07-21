@@ -466,6 +466,25 @@ describe('Query stringify', function () {
 
       expect(sqlString).toEqual('SELECT true AS `1` FROM `test`');
     });
+
+    it('should to sql without offset', function () {
+      const sqlString = queryString.select({
+        from: 'test',
+        limit: 2
+      });
+
+      expect(sqlString).toEqual('SELECT * FROM `test` LIMIT 2');
+    });
+
+    it('should to sql with offset and limit', function () {
+      const sqlString = queryString.select({
+        from: 'test',
+        limit: 2,
+        skip: 0
+      });
+
+      expect(sqlString).toEqual('SELECT * FROM `test` LIMIT 0, 2');
+    });
   });
 
   describe('set builder', function () {
