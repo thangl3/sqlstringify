@@ -592,4 +592,16 @@ describe('Query stringify', function () {
       expect(result).toEqual("INSERT INTO `abc` (`id`, `name`, `at`, `by`) VALUES (555, 'abc', NOW(), NULL)");
     });
   });
+
+  describe('stringify count builder', function () {
+    it('should be stringify count query', function () {
+      const result = queryString.count('abc', { name: 'egh' });
+      expect(result).toEqual("SELECT COUNT(*) AS `count` FROM `abc` WHERE `name` = 'egh'");
+    });
+
+    it('should be stringify count query with optional parameters', function () {
+      const result = queryString.count('abc', { name: 'egh' }, 1, 'total');
+      expect(result).toEqual("SELECT COUNT(1) AS `total` FROM `abc` WHERE `name` = 'egh'");
+    });
+  });
 });
