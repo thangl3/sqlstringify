@@ -591,6 +591,17 @@ describe('Query stringify', function () {
       const result = queryString.insertMany('abc', { id: 555, name: 'abc', at: 'NOW()', by: null });
       expect(result).toEqual("INSERT INTO `abc` (`id`, `name`, `at`, `by`) VALUES (555, 'abc', NOW(), NULL)");
     });
+
+    it('should be escape right data', () => {
+      const result = queryString.insertMany('abc', {
+        id: 555,
+        name: 'Đà Nẵng: Việt Nam(*)',
+        at: 'NOW()',
+        by: 'da-nang'
+      });
+
+      expect(result).toEqual("INSERT INTO `abc` (`id`, `name`, `at`, `by`) VALUES (555, 'Đà Nẵng: Việt Nam(*)', NOW(), 'da-nang')");
+    })
   });
 
   describe('stringify count builder', function () {
