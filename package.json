@@ -1,6 +1,6 @@
 {
   "name": "sqlstringify",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Simple SQL escape and format for MySQL - base on mysqljs/sqlstring",
   "main": "index.js",
   "directories": {
@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/thangl3/sqlstringify#readme",
   "devDependencies": {
-    "eslint": "^7.6.0",
+    "eslint": "^7.7.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.0",
     "jasmine": "^3.6.1",
