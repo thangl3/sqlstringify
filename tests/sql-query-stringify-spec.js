@@ -152,6 +152,17 @@ describe('Query stringify', function () {
       expect(result).toEqual("`name` = 'name1' AND `title` = 'title1' AND `title` = 'title2' AND `isActive` = true");
     });
 
+    it('should be stringify where like', function () {
+      const result = queryString.where({
+        name: 'name%',
+        title: ['title[a-z]', 'title[^0-9]'],
+        desc: 'a_c',
+        isActive: true,
+      });
+
+      expect(result).toEqual("`name` LIKE 'name%' AND `title` LIKE 'title[a-z]' AND `title` LIKE 'title[^0-9]' AND `desc` LIKE 'a_c' AND `isActive` = true");
+    });
+
     it("should to be empty", function () {
       const result = queryString.where({});
 
