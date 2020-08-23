@@ -41,17 +41,17 @@ describe('Query stringify', function () {
   });
 
   describe('stringify where clause object', function () {
-    it("should to be <(`name` = 'name3' OR `name` = 'name4')>", function () {
+    it("should to be <(`name` IN ('name3', 'name4'))>", function () {
       const result = queryString.where({
         name: {
           $or: ['name3', 'name4'],
         },
       });
 
-      expect(result).toEqual("(`name` = 'name3' OR `name` = 'name4')");
+      expect(result).toEqual("`name` IN ('name3', 'name4')");
     });
 
-    it("should to be <(`name` = 'name1' OR `name` = 'name2' AND `name` = 'name1' AND `name` = 'name2')>", function () {
+    it("should to be <(`name` IN ('name1', 'name2') AND `name` IN ('name1', 'name2'))>", function () {
       const result = queryString.where({
         name: {
           $or: ['name1', 'name2'],
@@ -59,10 +59,10 @@ describe('Query stringify', function () {
         },
       });
 
-      expect(result).toEqual("(`name` = 'name1' OR `name` = 'name2') AND (`name` = 'name1' AND `name` = 'name2')");
+      expect(result).toEqual("`name` IN ('name1', 'name2') AND `name` IN ('name1', 'name2')");
     });
 
-    it("should to be <(`name` = 'name1' AND `name` = 'name2' AND `title` = 'title1')>", function () {
+    it("should to be <`name` IN ('name1', 'name2') AND `title` = 'title1'>", function () {
       const result = queryString.where({
         name: {
           $and: ['name1', 'name2'],
@@ -70,10 +70,10 @@ describe('Query stringify', function () {
         title: 'title1',
       });
 
-      expect(result).toEqual("(`name` = 'name1' AND `name` = 'name2') AND `title` = 'title1'");
+      expect(result).toEqual("`name` IN ('name1', 'name2') AND `title` = 'title1'");
     });
 
-    it("should to be <(`name` = 'name1' OR `name` = 'name2') AND `title` = 'title1'>", function () {
+    it("should to be <`name` IN ('name1', 'name2') AND `title` = 'title1'>", function () {
       const result = queryString.where({
         name: {
           $or: ['name1', 'name2'],
@@ -81,7 +81,7 @@ describe('Query stringify', function () {
         title: 'title1',
       });
 
-      expect(result).toEqual("(`name` = 'name1' OR `name` = 'name2') AND `title` = 'title1'");
+      expect(result).toEqual("`name` IN ('name1', 'name2') AND `title` = 'title1'");
     });
 
     it("should to be <(`name` = 'name1' AND `title` = 'title1')>", function () {
@@ -95,7 +95,7 @@ describe('Query stringify', function () {
       expect(result).toEqual("(`name` = 'name1' AND `title` = 'title1')");
     });
 
-    it("should to be <(`name` = 'name1' AND `name` = 'name2' OR `title` = 'title1')>", function () {
+    it("should to be <(`name` IN ('name1', 'name2') OR `title` = 'title1')>", function () {
       const result = queryString.where({
         $or: {
           name: ['name1', 'name2'],
@@ -103,7 +103,7 @@ describe('Query stringify', function () {
         },
       });
 
-      expect(result).toEqual("((`name` = 'name1' AND `name` = 'name2') OR `title` = 'title1')");
+      expect(result).toEqual("(`name` IN ('name1', 'name2') OR `title` = 'title1')");
     });
 
     it("should to be <(`name` = 'name1' OR `title` = 'title1')>", function () {
@@ -125,31 +125,31 @@ describe('Query stringify', function () {
       expect(result).toEqual("`name` = 'name1'");
     });
 
-    it("should to be <`name` = 'name1'>", function () {
+    it("should to be <`name` IN ('name1')", function () {
       const result = queryString.where({
         name: ['name1'],
       });
 
-      expect(result).toEqual("`name` = 'name1'");
+      expect(result).toEqual("`name` IN ('name1')");
     });
 
-    it("should to be <`name` = 'name1' AND `title` = 't'>", function () {
+    it("should to be <`name` IN ('name1') AND `title` IN ('t')>", function () {
       const result = queryString.where({
         name: ['name1'],
         title: ['t'],
       });
 
-      expect(result).toEqual("`name` = 'name1' AND `title` = 't'");
+      expect(result).toEqual("`name` IN ('name1') AND `title` IN ('t')");
     });
 
-    it("should to be <`name` = 'name1' AND `title` = 'title1' AND `title` = 'title2' AND `isActive` = true>", function () {
+    it("should to be <`name` = 'name1' AND `title` IN ('title1', 'title2') AND `isActive` = true>", function () {
       const result = queryString.where({
         name: 'name1',
         title: ['title1', 'title2'],
         isActive: true,
       });
 
-      expect(result).toEqual("`name` = 'name1' AND `title` = 'title1' AND `title` = 'title2' AND `isActive` = true");
+      expect(result).toEqual("`name` = 'name1' AND `title` IN ('title1', 'title2') AND `isActive` = true");
     });
 
     it('should be stringify where like', function () {
@@ -160,7 +160,7 @@ describe('Query stringify', function () {
         isActive: true,
       });
 
-      expect(result).toEqual("`name` LIKE 'name%' AND `title` LIKE 'title[a-z]' AND `title` LIKE 'title[^0-9]' AND `desc` LIKE 'a_c' AND `isActive` = true");
+      expect(result).toEqual("`name` LIKE 'name%' AND `title` IN ('title[a-z]', 'title[^0-9]') AND `desc` LIKE 'a_c' AND `isActive` = true");
     });
 
     it('should be stringify where like', function () {
@@ -173,7 +173,7 @@ describe('Query stringify', function () {
         isActive: true,
       });
 
-      expect(result).toEqual("(`name` LIKE 'name%' OR (`title` LIKE 'title[a-z]' AND `title` LIKE 'title[^0-9]') OR `desc` LIKE 'a_c') AND `isActive` = true");
+      expect(result).toEqual("(`name` LIKE 'name%' OR `title` IN ('title[a-z]', 'title[^0-9]') OR `desc` LIKE 'a_c') AND `isActive` = true");
     });
 
     it("should to be empty", function () {
@@ -186,6 +186,92 @@ describe('Query stringify', function () {
       const result = queryString.where();
 
       expect(result).toEqual(null);
+    });
+
+    it('should be stringify where with dot column', function () {
+      const result = queryString.where({
+        name: {
+          a: 'sd',
+        }
+      });
+
+      expect(result).toEqual("`name`.`a` = 'sd'");
+    });
+
+    it('should be stringify where multiple conditions with dot column', function () {
+      const result = queryString.where({
+        name: {
+          a: 'sd',
+          b: 'f'
+        }
+      });
+
+      expect(result).toEqual("`name`.`a` = 'sd' AND `name`.`b` = 'f'");
+    });
+
+    it('should be stringify where with dot column, OR', function () {
+      const result = queryString.where({
+        name: {
+          $or: {
+            a: 'sd',
+            b: 'f'
+          }
+        }
+      });
+
+      expect(result).toEqual("(`name`.`a` = 'sd' OR `name`.`b` = 'f')");
+    });
+
+    it('should be stringify where with dot column, OR', function () {
+      const result = queryString.where({
+        name: {
+          $or: {
+            a: 'sd',
+            b: 'f'
+          },
+          d: 'as'
+        }
+      });
+
+      expect(result).toEqual("(`name`.`a` = 'sd' OR `name`.`b` = 'f') AND `name`.`d` = 'as'");
+    });
+
+    it('should be stringify where with  dot column, AND', function () {
+      const result = queryString.where({
+        name: {
+          $and: {
+            a: 'sd',
+            b: 'f'
+          }
+        }
+      });
+
+      expect(result).toEqual("(`name`.`a` = 'sd' AND `name`.`b` = 'f')");
+    });
+
+    it('should be stringify where with AND, dot column', function () {
+      const result = queryString.where({
+        $and: {
+          name: {
+            a: 'sd',
+            b: 'f'
+          }
+        }
+      });
+
+      expect(result).toEqual("(`name`.`a` = 'sd' AND `name`.`b` = 'f')");
+    });
+    it('should be stringify where with OR, dot column', function () {
+      const result = queryString.where({
+        $or: {
+          name: {
+            a: 'sd',
+            b: 'f'
+          }
+        }
+      });
+
+      expect(result).toEqual("(`name`.`a` = 'sd' AND `name`.`b` = 'f')");
     });
   });
 
@@ -230,6 +316,24 @@ describe('Query stringify', function () {
       const result = queryString.columns([{ name: 'name1', title: 'title1', all: '*' }]);
 
       expect(result).toEqual('`name`, `title`, `all`');
+    });
+
+    it('should be stringify array object with assign to column string', function () {
+      const result = queryString.columns([{ name: 'name1', title: 'title1', all: '*' }], 'b');
+
+      expect(result).toEqual('`b`.`name`, `b`.`title`, `b`.`all`');
+    });
+
+    it('should not be stringify cloumns <*> with assign', function () {
+      const result = queryString.columns(['*', 'a'], 'a');
+
+      expect(result).toEqual('`a`.*, `a`.`a`');
+    });
+
+    it('should be stringify object with assign to column string', function () {
+      const result = queryString.columns({ name: 'name1', title: 'title1', '*': 'asd' }, 'c');
+
+      expect(result).toEqual('`c`.`name`, `c`.`title`, `c`.*');
     });
   });
 
