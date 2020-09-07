@@ -1,6 +1,6 @@
 {
   "name": "sqlstringify",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "Simple SQL escape and format for MySQL - base on mysqljs/sqlstring",
   "main": "index.js",
   "directories": {

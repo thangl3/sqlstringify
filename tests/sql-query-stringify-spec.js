@@ -335,6 +335,12 @@ describe('Query stringify', function () {
 
       expect(result).toEqual('`c`.`name`, `c`.`title`, `c`.*');
     });
+
+    it('should be stringify object with assign to column *', function () {
+      const result = queryString.columns('*', 'c');
+
+      expect(result).toEqual('`c`.*');
+    });
   });
 
   describe('select builder', function () {
